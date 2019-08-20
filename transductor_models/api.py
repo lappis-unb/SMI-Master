@@ -1,5 +1,9 @@
+import json as js
+import jwt as JWT
+from django.conf import LazySettings
 import requests
 
+settings = LazySettings()
 
 def create_transductor_model(transductor_model, slave_server):
     protocol = "http://"
@@ -10,7 +14,23 @@ def create_transductor_model(transductor_model, slave_server):
         + slave_server.port\
         + endpoint
 
-    return requests.post(address, json=__get_data(transductor_model))
+    jwt = JWT.JWT()
+    key = JWT.jwk.OctetJWK(
+        key=settings.SECRET_KEY.encode('ascii'), kid=1
+    )
+
+    content = __get_data(transductor_model)
+    print(repr(content))
+
+    new_content = dict(
+        {'msg': str(jwt.encode(content, key))}
+    )
+
+    print(repr(new_content))
+
+    new_content = js.dumps(new_content)
+
+    return requests.post(address, json=new_content)
 
 
 def update_transductor_model(transductor_model, slave_server):
