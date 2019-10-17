@@ -2,6 +2,7 @@ import os
 import environ
 
 from unipath import Path
+from .wait_db import start_services
 
 env = environ.Env()
 
@@ -115,7 +116,8 @@ DATABASES = {
         'PORT': env('POSTGRES_PORT')
     }
 }
-
+# Starting other services that need to be up. Now it's only Postgres
+start_services()
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
