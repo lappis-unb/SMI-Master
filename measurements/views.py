@@ -225,10 +225,11 @@ class QuarterlyMeasurementViewSet(MeasurementViewSet):
                 field, 'collection_time'
             )
 
-            total_consumption_per_hour = self.apply_algorithm(
-                measurements,
-                field
-            )
+            if measurements:
+                total_consumption_per_hour = self.apply_algorithm(
+                    measurements,
+                    field
+                )
 
         return total_consumption_per_hour
 
@@ -281,6 +282,12 @@ class QuarterlyMeasurementViewSet(MeasurementViewSet):
 
         quarterly_measurements = {}
         quarterly_measurements['measurements'] = measurements_list
+        quarterly_measurements['min'] = min(
+            map(lambda x: x[-1], measurements_list)
+        )
+        quarterly_measurements['max'] = max(
+            map(lambda x: x[-1], measurements_list)
+        )
 
         if transductor != []:
             quarterly_measurements['transductor'] = transductor

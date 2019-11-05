@@ -132,10 +132,14 @@ class MeasurementSerializer(MinutelyMeasurementSerializer):
 
 class QuarterlySerializer(QuarterlyMeasurementSerializer):
     measurements = serializers.ListField(default=[])
+    min = serializers.FloatField(default=0.0)
+    max = serializers.FloatField(default=0.0)
 
     class Meta:
         model = QuarterlyMeasurement
         fields = (
             'id',
-            'measurements'
+            'measurements',
+            'min',
+            'max'
         )
