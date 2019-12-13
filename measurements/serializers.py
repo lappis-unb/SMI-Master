@@ -106,12 +106,13 @@ class ThreePhaseSerializer(MinutelyMeasurementSerializer):
     phase_a = serializers.ListField(default=[])
     phase_b = serializers.ListField(default=[])
     phase_c = serializers.ListField(default=[])
+    serial_number = serializers.CharField()
 
     class Meta:
         model = MinutelyMeasurement
         fields = (
             'id',
-            'transductor',
+            'serial_number',
             'phase_a',
             'phase_b',
             'phase_c'
@@ -120,12 +121,13 @@ class ThreePhaseSerializer(MinutelyMeasurementSerializer):
 
 class MeasurementSerializer(MinutelyMeasurementSerializer):
     measurements = serializers.ListField(default=[])
+    serial_number = serializers.CharField()
 
     class Meta:
         model = MinutelyMeasurement
         fields = (
             'id',
-            'transductor',
+            'serial_number',
             'measurements'
         )
 
@@ -139,7 +141,17 @@ class QuarterlySerializer(QuarterlyMeasurementSerializer):
         model = QuarterlyMeasurement
         fields = (
             'id',
+            # 'transductor',
             'measurements',
             'min',
             'max'
+        )
+
+
+class StackedQuarterlySerializer(QuarterlyMeasurementSerializer):
+    class Meta:
+        model = QuarterlyMeasurement
+        fields = (
+            'consumption',
+            'generated_energy'
         )

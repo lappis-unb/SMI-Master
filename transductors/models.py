@@ -1,6 +1,6 @@
 from .api import *
 from django.db import models
-from datetime import datetime
+from django.utils.timezone import datetime
 from polymorphic.models import PolymorphicModel
 from django.core.exceptions import ValidationError
 

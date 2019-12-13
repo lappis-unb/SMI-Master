@@ -81,6 +81,7 @@ class MinutelyMeasurementViewSet(MeasurementViewSet):
                 'any existent EnergyTransductor.'
             )
 
+        transductor = serial_number
         return self.mount_data_list(transductor)
 
     def mount_data_list(self, transductor):
@@ -135,7 +136,7 @@ class MinutelyMeasurementViewSet(MeasurementViewSet):
             )
 
         minutely_measurements = {}
-        minutely_measurements['transductor'] = transductor
+        minutely_measurements['serial_number'] = transductor
         minutely_measurements['phase_a'] = list_a
         minutely_measurements['phase_b'] = list_b
         minutely_measurements['phase_c'] = list_c
@@ -234,6 +235,7 @@ class QuarterlyMeasurementViewSet(MeasurementViewSet):
         return total_consumption_per_hour
 
     def apply_algorithm(self, measurements, field, transductor=[]):
+        period = self.request.query_params.get('period')
         measurements_list = (
             [
                 [
@@ -249,8 +251,10 @@ class QuarterlyMeasurementViewSet(MeasurementViewSet):
 
             if actual.minute < 15:
                 answer_hour = actual.hour
-            else:
+            elif actual.hour < 23:
                 answer_hour = actual.hour + 1
+            else:
+                answer_hour = 0
 
             last_hour = measurements_list[len(measurements_list) - 1][0].hour
 
