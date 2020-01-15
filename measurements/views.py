@@ -83,7 +83,6 @@ class MinutelyMeasurementViewSet(MeasurementViewSet):
                 'any existent EnergyTransductor.'
             )
 
-        transductor = serial_number
         return self.mount_data_list(transductor)
 
     def mount_data_list(self, transductor):
@@ -138,7 +137,7 @@ class MinutelyMeasurementViewSet(MeasurementViewSet):
             )
 
         minutely_measurements = {}
-        minutely_measurements['serial_number'] = transductor
+        minutely_measurements['transductor'] = transductor
         minutely_measurements['phase_a'] = list_a
         minutely_measurements['phase_b'] = list_b
         minutely_measurements['phase_c'] = list_c
