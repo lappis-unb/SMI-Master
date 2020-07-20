@@ -1,6 +1,6 @@
 from django_cron import CronJobBase, Schedule
 from datetime import datetime
-from .utils import CheckTransductorsAndSlaves
+from .utils import CheckTransductorsAndSubordinates
 from .utils import DataCollector
 from django.utils.translation import gettext_lazy as _
 
@@ -8,14 +8,14 @@ from django.utils.translation import gettext_lazy as _
 class CheckTransductorBrokenCronJob(CronJobBase):
     RUN_EVERY_MINS = 0
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = 'slaves.cronjob.CheckTransductorBroken'
+    code = 'subordinates.cronjob.CheckTransductorBroken'
 
     class Meta:
         verbose_name = _('Check meters cronjob')
 
     def do(self):
         now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-        checker = CheckTransductorsAndSlaves()
+        checker = CheckTransductorsAndSubordinates()
         checker.check_transductors()
         print("Checking transductors at {}".format(now))
 
@@ -23,7 +23,7 @@ class CheckTransductorBrokenCronJob(CronJobBase):
 class GetAllMeasurementsCronJob(CronJobBase):
     RUN_EVERY_MINS = 0
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = 'slaves.cronjob.GetAllMeasurements'
+    code = 'subordinates.cronjob.GetAllMeasurements'
 
     class Meta:
         verbose_name = _('Get all measurements cronjob')
@@ -38,7 +38,7 @@ class GetAllMeasurementsCronJob(CronJobBase):
 class GetAllEventsCronJob(CronJobBase):
     RUN_EVERY_MINS = 0
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = 'slaves.cronjob.GetAllEvents'
+    code = 'subordinates.cronjob.GetAllEvents'
 
     def do(self):
         now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
@@ -50,7 +50,7 @@ class GetAllEventsCronJob(CronJobBase):
 class GetRealTimeMeasurementsCronJob(CronJobBase):
     RUN_EVERY_MINS = 0
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = 'slaves.cronjob.GetRealTimeMeasurements'
+    code = 'subordinates.cronjob.GetRealTimeMeasurements'
 
     class Meta:
         verbose_name = _('Get real time measurements cronjob')

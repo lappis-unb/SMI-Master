@@ -1,6 +1,6 @@
 from rest_framework import serializers as s
 
-from .models import FailedConnectionSlaveEvent
+from .models import FailedConnectionSubordinateEvent
 from .models import FailedConnectionTransductorEvent
 from .models import VoltageRelatedEvent
 from .models import Event
@@ -18,15 +18,15 @@ class VoltageRelatedEventSerializer(s.HyperlinkedModelSerializer):
         )
 
 
-class FailedConnectionSlaveEventSerializer(s.HyperlinkedModelSerializer):
+class FailedConnectionSubordinateEventSerializer(s.HyperlinkedModelSerializer):
     class Meta:
-        model = FailedConnectionSlaveEvent
+        model = FailedConnectionSubordinateEvent
         fields = (
             'id',
             'data',
             'created_at',
             'ended_at',
-            'slave'
+            'subordinate'
         )
 
 
@@ -44,7 +44,7 @@ class FailedConnectionTransductorEventSerializer(s.HyperlinkedModelSerializer):
 
 class AllEventSerializer(s.HyperlinkedModelSerializer):
     count = s.IntegerField()
-    slave_connection_fail = s.ListField(child=s.DictField())
+    subordinate_connection_fail = s.ListField(child=s.DictField())
     transductor_connection_fail = s.ListField(child=s.DictField())
     critical_tension = s.ListField(child=s.DictField())
     precarious_tension = s.ListField(child=s.DictField())
@@ -57,6 +57,6 @@ class AllEventSerializer(s.HyperlinkedModelSerializer):
             'critical_tension',
             'precarious_tension',
             'phase_drop',
-            'slave_connection_fail',
+            'subordinate_connection_fail',
             'transductor_connection_fail'
         )

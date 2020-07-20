@@ -12,18 +12,18 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('transductors', '0002_auto_20190930_0943'),
-        ('slaves', '0002_auto_20200106_1553'),
+        ('subordinates', '0002_auto_20200106_1553'),
         ('contenttypes', '0002_remove_content_type_name'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='FailedConnectionSlaveEvent',
+            name='FailedConnectionSubordinateEvent',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('polymorphic_ctype', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='polymorphic_events.failedconnectionslaveevent_set+', to='contenttypes.ContentType')),
-                ('slave', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events_failedconnectionslaveevent', to='slaves.Slave')),
+                ('polymorphic_ctype', models.ForeignKey(editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='polymorphic_events.failedconnectionsubordinateevent_set+', to='contenttypes.ContentType')),
+                ('subordinate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events_failedconnectionsubordinateevent', to='subordinates.Subordinate')),
             ],
             options={
                 'abstract': False,

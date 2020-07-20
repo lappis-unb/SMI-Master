@@ -10,9 +10,9 @@ router.register(
     basename='voltage-related-events'
 )
 router.register(
-    r'failed-connection-slave-events',
-    FailedConnectionSlaveEventViewSet,
-    basename='failed-connection-slave-events'
+    r'failed-connection-subordinate-events',
+    FailedConnectionSubordinateEventViewSet,
+    basename='failed-connection-subordinate-events'
 )
 router.register(
     r'failed-connection-transductor-events',

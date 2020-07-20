@@ -23,8 +23,8 @@ class Migration(migrations.Migration):
             options={'verbose_name': 'critical voltage'},
         ),
         migrations.AlterModelOptions(
-            name='failedconnectionslaveevent',
-            options={'verbose_name': 'failed connection with slave server'},
+            name='failedconnectionsubordinateevent',
+            options={'verbose_name': 'failed connection with subordinate server'},
         ),
         migrations.AlterModelOptions(
             name='failedconnectiontransductorevent',

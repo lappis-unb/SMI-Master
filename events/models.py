@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from polymorphic.models import PolymorphicModel
 
-from slaves.models import Slave
+from subordinates.models import Subordinate
 from transductors.models import EnergyTransductor
 
 
@@ -91,30 +91,30 @@ class FailedConnectionTransductorEvent(Event):
         return new_event
 
 
-class FailedConnectionSlaveEvent(Event):
+class FailedConnectionSubordinateEvent(Event):
     """
-    Defines a new event related to a failed connection with a slave
+    Defines a new event related to a failed connection with a subordinate
     """
-    slave = models.ForeignKey(
-        Slave,
+    subordinate = models.ForeignKey(
+        Subordinate,
         related_name="%(app_label)s_%(class)s",
         on_delete=models.CASCADE,
         blank=False,
         null=False,
-        verbose_name=_('slave'),
+        verbose_name=_('subordinate'),
         help_text=_('This field is required')
     )
 
     class Meta:
-        verbose_name = _('failed connection with slave server')
+        verbose_name = _('failed connection with subordinate server')
 
     @staticmethod
-    def save_event(slave):
+    def save_event(subordinate):
         """
-        Saves a failed connection event related to a slave
+        Saves a failed connection event related to a subordinate
         """
-        new_event = FailedConnectionSlaveEvent()
-        new_event.slave = slave
+        new_event = FailedConnectionSubordinateEvent()
+        new_event.subordinate = subordinate
         new_event.save()
         return new_event
 

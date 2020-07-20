@@ -146,9 +146,9 @@ class Transductor(PolymorphicModel):
         self.full_clean()
         failed = False
 
-        for slave in self.slave_servers.all():
+        for subordinate in self.subordinate_servers.all():
             if not kwargs.get('bypass_requests', None):
-                response = update_transductor(self, slave)
+                response = update_transductor(self, subordinate)
                 if not self.__is_success_status(response.status_code):
                     failed = True
 
@@ -156,15 +156,15 @@ class Transductor(PolymorphicModel):
             super(Transductor, self).save()
         else:
             # FIXME: Raise exception
-            print("Couldn't update this transductor in all Slave Servers")
+            print("Couldn't update this transductor in all Subordinate Servers")
 
     def delete(self, *args, **kwargs):
         self.active = False
 
         failed = False
-        for slave in self.slave_servers.all():
+        for subordinate in self.subordinate_servers.all():
             if not kwargs.get('bypass_requests', None):
-                response = slave.remove_transductor(self)
+                response = subordinate.remove_transductor(self)
                 if not self.__successfully_deleted(response.status_code):
                     failed = True
 
@@ -173,13 +173,13 @@ class Transductor(PolymorphicModel):
             super(Transductor, self).delete()
         else:
             # FIXME: Raise exception
-            print("Couldn't delete this transductor in all Slave Servers")
+            print("Couldn't delete this transductor in all Subordinate Servers")
 
     def get_measurements(self, datetime):
         raise NotImplementedError
 
     def activate(self):
-        if(len(self.slave_servers.all()) > 0):
+        if(len(self.subordinate_servers.all()) > 0):
             self.active = True
         else:
             self.active = False
@@ -188,11 +188,11 @@ class Transductor(PolymorphicModel):
         self.activate()
         return self.active
 
-    def create_on_server(self, slave_server):
-        return create_transductor(self, slave_server)
+    def create_on_server(self, subordinate_server):
+        return create_transductor(self, subordinate_server)
 
-    def delete_on_server(self, slave_server):
-        return delete_transductor(self, slave_server)
+    def delete_on_server(self, subordinate_server):
+        return delete_transductor(self, subordinate_server)
 
     def collect_broken_status(self):
         return self.broken

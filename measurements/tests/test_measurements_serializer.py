@@ -13,7 +13,7 @@ from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 
 from campi.models import Campus
-from slaves.models import Slave
+from subordinates.models import Subordinate
 from transductors.models import EnergyTransductor
 from measurements.models import MonthlyMeasurement
 from measurements.models import MinutelyMeasurement
@@ -23,7 +23,7 @@ from measurements.serializers import ThreePhaseSerializer
 
 class MeasurementsTestCase(TestCase):
     def setUp(self):
-        self.slave = Slave.objects.create(
+        self.subordinate = Subordinate.objects.create(
             ip_address="1.1.1.1", location="UED FGA", broken=False
         )
 
@@ -40,7 +40,7 @@ class MeasurementsTestCase(TestCase):
             campus=self.campus
         )
 
-        self.transductor.slave_servers.add(self.slave)
+        self.transductor.subordinate_servers.add(self.subordinate)
 
         self.time = datetime(2000, 1, 1, 1, 0, 0, 0)
 

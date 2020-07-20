@@ -14,14 +14,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Slave',
+            name='Subordinate',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('ip_address', models.CharField(max_length=15, validators=[django.core.validators.RegexValidator('^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$', 'Incorrect IP address format')])),
                 ('port', models.CharField(default='80', max_length=5)),
                 ('location', models.CharField(max_length=50)),
                 ('broken', models.BooleanField(default=True)),
-                ('transductors', models.ManyToManyField(related_name='slave_servers', to='transductors.EnergyTransductor')),
+                ('transductors', models.ManyToManyField(related_name='subordinate_servers', to='transductors.EnergyTransductor')),
             ],
         ),
     ]

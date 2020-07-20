@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
             options={'base_manager_name': 'objects'},
         ),
         migrations.AlterModelOptions(
-            name='failedconnectionslaveevent',
+            name='failedconnectionsubordinateevent',
             options={'base_manager_name': 'objects'},
         ),
         migrations.AlterModelOptions(
@@ -51,19 +51,19 @@ class Migration(migrations.Migration):
             options={'base_manager_name': 'objects'},
         ),
         migrations.RemoveField(
-            model_name='failedconnectionslaveevent',
+            model_name='failedconnectionsubordinateevent',
             name='created_at',
         ),
         migrations.RemoveField(
-            model_name='failedconnectionslaveevent',
+            model_name='failedconnectionsubordinateevent',
             name='ended_at',
         ),
         migrations.RemoveField(
-            model_name='failedconnectionslaveevent',
+            model_name='failedconnectionsubordinateevent',
             name='id',
         ),
         migrations.RemoveField(
-            model_name='failedconnectionslaveevent',
+            model_name='failedconnectionsubordinateevent',
             name='polymorphic_ctype',
         ),
         migrations.RemoveField(
@@ -99,7 +99,7 @@ class Migration(migrations.Migration):
             name='polymorphic_ctype',
         ),
         migrations.AddField(
-            model_name='failedconnectionslaveevent',
+            model_name='failedconnectionsubordinateevent',
             name='event_ptr',
             field=models.OneToOneField(auto_created=True, default=None, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='events.Event'),
             preserve_default=False,

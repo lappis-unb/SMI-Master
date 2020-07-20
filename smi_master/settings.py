@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'campi',
-    'slaves',
+    'subordinates',
     'measurements',
     'transductors',
     'users',
@@ -96,7 +96,7 @@ CORS_ALLOW_HEADERS = [
     'authorization'
 ]
 
-ROOT_URLCONF = 'smi_master.urls'
+ROOT_URLCONF = 'smi_main.urls'
 
 TEMPLATES = [
     {
@@ -115,11 +115,11 @@ TEMPLATES = [
 ]
 
 CRON_CLASSES = [
-    "slaves.cronjob.CheckTransductorBrokenCronjob",
-    "slaves.cronjob.GetAllMeasurementsCronjob"
+    "subordinates.cronjob.CheckTransductorBrokenCronjob",
+    "subordinates.cronjob.GetAllMeasurementsCronjob"
 ]
 
-WSGI_APPLICATION = 'smi_master.wsgi.application'
+WSGI_APPLICATION = 'smi_main.wsgi.application'
 
 
 # Database

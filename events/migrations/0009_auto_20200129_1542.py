@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('transductors', '0009_auto_20200129_1542'),
-        ('slaves', '0004_auto_20200129_1503'),
+        ('subordinates', '0004_auto_20200129_1503'),
         ('events', '0008_auto_20200121_1112'),
     ]
 
@@ -32,8 +32,8 @@ class Migration(migrations.Migration):
             options={'verbose_name': 'event'},
         ),
         migrations.AlterModelOptions(
-            name='failedconnectionslaveevent',
-            options={'verbose_name': 'failed connection with slave server event'},
+            name='failedconnectionsubordinateevent',
+            options={'verbose_name': 'failed connection with subordinate server event'},
         ),
         migrations.AlterModelOptions(
             name='failedconnectiontransductorevent',
@@ -72,9 +72,9 @@ class Migration(migrations.Migration):
             field=models.DateTimeField(blank=True, null=True, verbose_name='ended at'),
         ),
         migrations.AlterField(
-            model_name='failedconnectionslaveevent',
-            name='slave',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events_failedconnectionslaveevent', to='slaves.Slave', verbose_name='slave'),
+            model_name='failedconnectionsubordinateevent',
+            name='subordinate',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='events_failedconnectionsubordinateevent', to='subordinates.Subordinate', verbose_name='subordinate'),
         ),
         migrations.AlterField(
             model_name='failedconnectiontransductorevent',

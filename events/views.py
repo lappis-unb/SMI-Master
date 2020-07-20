@@ -15,7 +15,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .models import *
 
 from .serializers import VoltageRelatedEventSerializer
-from .serializers import FailedConnectionSlaveEventSerializer
+from .serializers import FailedConnectionSubordinateEventSerializer
 from .serializers import FailedConnectionTransductorEventSerializer
 from .serializers import AllEventSerializer
 
@@ -83,21 +83,21 @@ class VoltageRelatedEventViewSet(EventViewSet):
             )
 
 
-class FailedConnectionSlaveEventViewSet(EventViewSet):
-    model = FailedConnectionSlaveEvent
-    serializer_class = FailedConnectionSlaveEventSerializer
+class FailedConnectionSubordinateEventViewSet(EventViewSet):
+    model = FailedConnectionSubordinateEvent
+    serializer_class = FailedConnectionSubordinateEventSerializer
 
     def specific_query(self):
         ip_address = self.request.query_params.get('ip_address')
 
         try:
-            slave = Slave.objects.get(ip_address=slave_ip)
+            subordinate = Subordinate.objects.get(ip_address=subordinate_ip)
             self.queryset = self.queryset.filter(
-                slave=slave
+                subordinate=subordinate
             )
-        except Slave.DoesNotExist:
+        except Subordinate.DoesNotExist:
             raise APIException(
-                'IP Address does not match with any slave'
+                'IP Address does not match with any subordinate'
             )
 
 
@@ -156,8 +156,8 @@ class AllEventsViewSet(viewsets.ReadOnlyModelViewSet):
                 type
             )
 
-            failed_connection_slave_events = self.generic_filter(
-                FailedConnectionSlaveEvent,
+            failed_connection_subordinate_events = self.generic_filter(
+                FailedConnectionSubordinateEvent,
                 (initial, now),
                 type
             )
@@ -171,8 +171,8 @@ class AllEventsViewSet(viewsets.ReadOnlyModelViewSet):
                 FailedConnectionTransductorEvent
             )
 
-            failed_connection_slave_events = self.generic_filter(
-                FailedConnectionSlaveEvent
+            failed_connection_subordinate_events = self.generic_filter(
+                FailedConnectionSubordinateEvent
             )
 
         if serial_number:
@@ -190,9 +190,9 @@ class AllEventsViewSet(viewsets.ReadOnlyModelViewSet):
                     )
                 )
 
-                failed_connection_slave_events = (
-                    failed_connection_slave_events.filter(
-                        slave__transductors__in=[transductor]
+                failed_connection_subordinate_events = (
+                    failed_connection_subordinate_events.filter(
+                        subordinate__transductors__in=[transductor]
                     )
                 )
             except EnergyTransductor.DoesNotExist:
@@ -216,18 +216,18 @@ class AllEventsViewSet(viewsets.ReadOnlyModelViewSet):
             events, failed_connection_transductor_events, self.events[type]
         )
 
-        slave_events = []
+        subordinate_events = []
 
-        for element in failed_connection_slave_events:
+        for element in failed_connection_subordinate_events:
             if serial_number:
                 transductors = (
-                    element.slave.transductors.select_related('campus').filter(
+                    element.subordinate.transductors.select_related('campus').filter(
                         serial_number=serial_number
                     )
                 )
             else:
                 transductors = (
-                    element.slave.transductors.select_related('campus').all()
+                    element.subordinate.transductors.select_related('campus').all()
                 )
             for transductor in transductors:
                 event = {}
@@ -235,15 +235,15 @@ class AllEventsViewSet(viewsets.ReadOnlyModelViewSet):
                 event['location'] = transductor.name
                 event['campus'] = transductor.campus.acronym
                 event['transductor'] = transductor.serial_number
-                event['data'] = {'slave': element.slave.pk}
+                event['data'] = {'subordinate': element.subordinate.pk}
                 event['start_time'] = element.created_at
                 event['end_time'] = element.ended_at
-                slave_events.append(event)
+                subordinate_events.append(event)
 
-        events['slave_connection_fail'] = slave_events
+        events['subordinate_connection_fail'] = subordinate_events
 
         events['count'] = \
-            len(events['slave_connection_fail']) + \
+            len(events['subordinate_connection_fail']) + \
             len(events['transductor_connection_fail']) +\
             len(events['phase_drop']) + \
             len(events['critical_tension'])

@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='failedconnectionslaveevent',
+            model_name='failedconnectionsubordinateevent',
             name='ended_at',
             field=models.DateTimeField(blank=True, null=True),
         ),

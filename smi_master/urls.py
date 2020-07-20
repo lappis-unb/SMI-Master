@@ -12,7 +12,7 @@ from users import views as users_views
 from events import urls as events_routes
 from transductors import views as energy_transductor_views
 
-from slaves import views as slaves_views
+from subordinates import views as subordinates_views
 from measurements import urls as measurements_routes
 from events import urls as events_routes
 from groups import urls as groups_routes
@@ -23,7 +23,7 @@ from .views import login
 
 router = DefaultRouter()
 router.register(r'campi', campi_views.CampusViewSet)
-router.register(r'slave', slaves_views.SlaveViewSet)
+router.register(r'subordinate', subordinates_views.SubordinateViewSet)
 router.register(r'users', users_views.UserViewSet)
 
 router.registry.extend(measurements_routes.router.registry)

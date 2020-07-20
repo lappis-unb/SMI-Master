@@ -6,12 +6,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('slaves', '0001_initial'),
+        ('subordinates', '0001_initial'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='slave',
+            model_name='subordinate',
             name='ip_address',
             field=models.CharField(max_length=50),
         ),

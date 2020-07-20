@@ -13,7 +13,7 @@ from transductors.models import EnergyTransductor
 """
 
 
-class Slave(models.Model):
+class Subordinate(models.Model):
 
     ip_address = models.CharField(
         max_length=50,
@@ -40,20 +40,20 @@ class Slave(models.Model):
 
     transductors = models.ManyToManyField(
         EnergyTransductor,
-        related_name='slave_servers',
+        related_name='subordinate_servers',
         verbose_name=_('Meters'),
         help_text=_('This field is required')
     )
 
     class Meta:
-        verbose_name = _('Slave server')
+        verbose_name = _('Subordinate server')
 
     def __str__(self):
         return self.ip_address
 
     def save(self, *args, **kwargs):
         self.full_clean()
-        super(Slave, self).save(*args, **kwargs)
+        super(Subordinate, self).save(*args, **kwargs)
 
     def add_transductor(self, transductor):
         response = transductor.create_on_server(self)
@@ -72,24 +72,24 @@ class Slave(models.Model):
         Set the broken atribute's new status to match the param.
         If toggled to True, creates a failed connection event
         """
-        from events.models import FailedConnectionSlaveEvent
+        from events.models import FailedConnectionSubordinateEvent
 
         old_status = self.broken
 
         if old_status is True and new_status is False:
             try:
-                related_event = FailedConnectionSlaveEvent.objects.filter(
-                    slave=self,
+                related_event = FailedConnectionSubordinateEvent.objects.filter(
+                    subordinate=self,
                     ended_at__isnull=True
                 ).last()
                 related_event.ended_at = timezone.now()
                 related_event.save()
 
-            except FailedConnectionSlaveEvent.DoesNotExist as e:
+            except FailedConnectionSubordinateEvent.DoesNotExist as e:
                 pass
 
         elif old_status is False and new_status is True:
-            evt = FailedConnectionSlaveEvent()
+            evt = FailedConnectionSubordinateEvent()
             evt.save_event(self)
 
         self.broken = new_status

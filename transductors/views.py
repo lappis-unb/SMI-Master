@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import serializers, viewsets, permissions, status
 
 from .api import *
-from slaves.models import Slave
+from subordinates.models import Subordinate
 from .models import EnergyTransductor
 from .serializers import EnergyTransductorSerializer, \
     AddToServerSerializer, EnergyTransductorListSerializer
@@ -28,10 +28,10 @@ class EnergyTransductorViewSet(viewsets.ModelViewSet):
     def add_to_server(self, request, pk=None):
         serializer_class = AddToServerSerializer(data=request.data)
         if serializer_class.is_valid():
-            slave_server = Slave.objects.get(
-                id=serializer_class.data["slave_id"]
+            subordinate_server = Subordinate.objects.get(
+                id=serializer_class.data["subordinate_id"]
             )
-            response = slave_server.add_transductor(self.get_object())
+            response = subordinate_server.add_transductor(self.get_object())
             return Response(data=json.loads(response.content),
                             status=response.status_code)
         else:
@@ -46,7 +46,7 @@ class EnergyTransductorListViewSet(viewsets.GenericViewSet,
     
     def get_queryset(self):
         transductors = EnergyTransductor.objects.all()
-        slaves = Slave.objects.all()
+        subordinates = Subordinate.objects.all()
         transductorList = {}
         for transductor in transductors:
             crit = transductor.events_failedconnectiontransductorevent.filter(
@@ -76,20 +76,20 @@ class EnergyTransductorListViewSet(viewsets.GenericViewSet,
             }
             transductor_id = transductor.pk
             transductorList[transductor.pk] = transductorInformation
-        for slave in slaves:
-            slave_transductors = slave.transductors.all()
-            for transductor in slave_transductors:
+        for subordinate in subordinates:
+            subordinate_transductors = subordinate.transductors.all()
+            for transductor in subordinate_transductors:
                 transductor_id = transductor.pk
                 count = transductorList[transductor_id][
                     'current_precarious_events_count']
                 count = count + \
-                    slave.events_failedconnectionslaveevent.filter(
+                    subordinate.events_failedconnectionsubordinateevent.filter(
                         ended_at__isnull=True).count()
                 transductorList[transductor_id][
                     'current_precarious_events_count'] = count
                 count = transductorList[transductor_id]['events_last72h']
                 count = count + \
-                    slave.events_failedconnectionslaveevent.filter(
+                    subordinate.events_failedconnectionsubordinateevent.filter(
                         Q(ended_at__isnull=True) | Q(ended_at__range=[
                             timezone.now() - timezone.timedelta(days=3), 
                             timezone.now()
