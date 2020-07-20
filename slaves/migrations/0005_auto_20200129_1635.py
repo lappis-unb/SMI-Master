@@ -7,23 +7,23 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('transductors', '0011_auto_20200129_1635'),
-        ('slaves', '0004_auto_20200129_1503'),
+        ('subordinates', '0004_auto_20200129_1503'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='slave',
+            model_name='subordinate',
             name='ip_address',
             field=models.CharField(help_text='This field is required', max_length=50, verbose_name='IP address'),
         ),
         migrations.AlterField(
-            model_name='slave',
+            model_name='subordinate',
             name='location',
             field=models.CharField(help_text='This field is required', max_length=50, verbose_name='Location'),
         ),
         migrations.AlterField(
-            model_name='slave',
+            model_name='subordinate',
             name='transductors',
-            field=models.ManyToManyField(help_text='This field is required', related_name='slave_servers', to='transductors.EnergyTransductor', verbose_name='Meters'),
+            field=models.ManyToManyField(help_text='This field is required', related_name='subordinate_servers', to='transductors.EnergyTransductor', verbose_name='Meters'),
         ),
     ]

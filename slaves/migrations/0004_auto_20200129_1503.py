@@ -7,37 +7,37 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('transductors', '0005_auto_20200129_1503'),
-        ('slaves', '0003_merge_20200115_1221'),
+        ('subordinates', '0003_merge_20200115_1221'),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='slave',
-            options={'verbose_name': 'Slave server'},
+            name='subordinate',
+            options={'verbose_name': 'Subordinate server'},
         ),
         migrations.AlterField(
-            model_name='slave',
+            model_name='subordinate',
             name='broken',
             field=models.BooleanField(default=False, verbose_name='Broken'),
         ),
         migrations.AlterField(
-            model_name='slave',
+            model_name='subordinate',
             name='ip_address',
             field=models.CharField(max_length=50, verbose_name='IP address'),
         ),
         migrations.AlterField(
-            model_name='slave',
+            model_name='subordinate',
             name='location',
             field=models.CharField(max_length=50, verbose_name='Location'),
         ),
         migrations.AlterField(
-            model_name='slave',
+            model_name='subordinate',
             name='port',
             field=models.CharField(default='80', max_length=5, verbose_name='IP access port'),
         ),
         migrations.AlterField(
-            model_name='slave',
+            model_name='subordinate',
             name='transductors',
-            field=models.ManyToManyField(related_name='slave_servers', to='transductors.EnergyTransductor', verbose_name='Meters'),
+            field=models.ManyToManyField(related_name='subordinate_servers', to='transductors.EnergyTransductor', verbose_name='Meters'),
         ),
     ]

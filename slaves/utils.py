@@ -4,14 +4,14 @@ import urllib.request
 from datetime import timedelta
 from django.utils.timezone import datetime
 
-from .models import Slave
+from .models import Subordinate
 from .api import request_all_events
 from .api import request_measurements
 
 from events.models import PhaseDropEvent
 from events.models import CriticalVoltageEvent
 from events.models import PrecariousVoltageEvent
-from events.models import FailedConnectionSlaveEvent
+from events.models import FailedConnectionSubordinateEvent
 from events.models import FailedConnectionTransductorEvent
 
 from transductors.models import EnergyTransductor
@@ -22,15 +22,15 @@ from measurements.models import MonthlyMeasurement
 from measurements.models import RealTimeMeasurement
 
 
-class CheckTransductorsAndSlaves():
+class CheckTransductorsAndSubordinates():
 
     def check_transductors(self):
 
-        slaves = Slave.objects.all()
+        subordinates = Subordinate.objects.all()
 
-        for slave in slaves:
+        for subordinate in subordinates:
             # to work in dev dont forget to insert the port
-            url = 'http://' + slave.ip_address + ":" + \
+            url = 'http://' + subordinate.ip_address + ":" + \
                 os.getenv('SLAVE_PORT') + '/broken-transductors'
             try:
                 web_request = urllib.request.urlopen(url)
@@ -48,15 +48,15 @@ class CheckTransductorsAndSlaves():
                         transductor_status.broken = transductor['broken']
                         transductor_status.save()
 
-                    slave.set_broken(False)
+                    subordinate.set_broken(False)
                 else:
-                    slave.set_broken(True)
+                    subordinate.set_broken(True)
 
             except Exception:
-                slave.set_broken(True)
+                subordinate.set_broken(True)
 
 # TODO Não sabemos como resolver essa comunicação
-# Transdutores em mais de um slave tem que ser tratados de forma diferente?
+# Transdutores em mais de um subordinate tem que ser tratados de forma diferente?
 
 
 class DataCollector():
@@ -236,12 +236,12 @@ class DataCollector():
     @staticmethod
     def get_events():
         """
-        Collects all events previously created on the slave servers
+        Collects all events previously created on the subordinate servers
         """
-        slave_servers = Slave.objects.all()
+        subordinate_servers = Subordinate.objects.all()
 
-        for slave in slave_servers:
-            event_responses = request_all_events(slave)
+        for subordinate in subordinate_servers:
+            event_responses = request_all_events(subordinate)
             for pairs in event_responses:
                 loaded_events = json.loads(pairs[1].content)
                 DataCollector.save_event_object(loaded_events, pairs[0])
@@ -289,16 +289,16 @@ class DataCollector():
     @staticmethod
     def get_measurements(*args, **kwargs):
         """
-        Collects a given set of measurements from all slave servers
+        Collects a given set of measurements from all subordinate servers
         """
-        slaves = Slave.objects.all()
+        subordinates = Subordinate.objects.all()
 
         collection_date = datetime.now()
-        for slave in slaves:
+        for subordinate in subordinates:
             if kwargs.get('realtime', None):
                 realtime_response = request_measurements(
                     'realtime-measurements',
-                    slave
+                    subordinate
                 )
 
                 measurement = json.loads(realtime_response.content)
@@ -313,13 +313,13 @@ class DataCollector():
                     except Exception as exception:
                         print(exception)
 
-            for transductor in slave.transductors.all():
+            for transductor in subordinate.transductors.all():
                 collection_date = datetime.now()
                 if kwargs.get('minutely', None):
-                    # Get response and save it in the master database
+                    # Get response and save it in the main database
                     minutely_response = request_measurements(
                         "minutely-measurements",
-                        slave,
+                        subordinate,
                         transductor,
                         transductor.last_minutely_collection,
                         collection_date
@@ -341,7 +341,7 @@ class DataCollector():
                 if kwargs.get('quarterly', None):
                     quarterly_response = request_measurements(
                         "quarterly-measurements",
-                        slave,
+                        subordinate,
                         transductor,
                         transductor.last_quarterly_collection,
                         collection_date
@@ -364,7 +364,7 @@ class DataCollector():
                 if kwargs.get('monthly', None):
                     monthly_response = request_measurements(
                         "monthly-measurements",
-                        slave,
+                        subordinate,
                         transductor,
                         transductor.last_monthly_collection,
                         collection_date

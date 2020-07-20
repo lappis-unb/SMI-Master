@@ -2,14 +2,14 @@ import requests
 from datetime import datetime, timedelta
 
 
-def request_measurements(measurement_type, slave, transductor=None, 
+def request_measurements(measurement_type, subordinate, transductor=None, 
                          start_date=None, end_date=None):
     protocol = "http://"
     endpoint = "/" + measurement_type + "/"
     address = protocol\
-        + slave.ip_address\
+        + subordinate.ip_address\
         + ":"\
-        + slave.port\
+        + subordinate.port\
         + endpoint
 
     params = {}
@@ -27,19 +27,19 @@ def request_measurements(measurement_type, slave, transductor=None,
     return requests.get(address, params=params)
 
 
-def request_all_events(slave):
+def request_all_events(subordinate):
     """
-    Gets all slave related events.
+    Gets all subordinate related events.
     Returns an array of tuples containing tuple(Classname, response) pairs
     """
     responses = [
         (
             "FailedConnectionTransductorEvent",
-            request_measurements('failed-connection-events', slave)
+            request_measurements('failed-connection-events', subordinate)
         ),
         (
             "VoltageRelatedEvent",
-            request_measurements('voltage-events', slave)
+            request_measurements('voltage-events', subordinate)
         )
     ]
 

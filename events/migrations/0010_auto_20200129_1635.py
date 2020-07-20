@@ -8,7 +8,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('slaves', '0005_auto_20200129_1635'),
+        ('subordinates', '0005_auto_20200129_1635'),
         ('transductors', '0011_auto_20200129_1635'),
         ('events', '0009_auto_20200129_1542'),
     ]
@@ -20,9 +20,9 @@ class Migration(migrations.Migration):
             field=django.contrib.postgres.fields.jsonb.JSONField(default=dict, help_text='This field is required', verbose_name='details'),
         ),
         migrations.AlterField(
-            model_name='failedconnectionslaveevent',
-            name='slave',
-            field=models.ForeignKey(help_text='This field is required', on_delete=django.db.models.deletion.CASCADE, related_name='events_failedconnectionslaveevent', to='slaves.Slave', verbose_name='slave'),
+            model_name='failedconnectionsubordinateevent',
+            name='subordinate',
+            field=models.ForeignKey(help_text='This field is required', on_delete=django.db.models.deletion.CASCADE, related_name='events_failedconnectionsubordinateevent', to='subordinates.Subordinate', verbose_name='subordinate'),
         ),
         migrations.AlterField(
             model_name='failedconnectiontransductorevent',

@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
 
-from slaves.models import Slave
+from subordinates.models import Subordinate
 from campi.models import Campus
 from transductors.models import Transductor, EnergyTransductor
 
@@ -31,7 +31,7 @@ class TransductorTestCase(TestCase):
             history='Transductor history'
         )
 
-        self.sample_slave_server = Slave.objects.create(
+        self.sample_subordinate_server = Subordinate.objects.create(
             ip_address="10.0.0.1",
             location="FGA",
             broken=False
@@ -194,15 +194,15 @@ class TransductorTestCase(TestCase):
             transductor.delete()
         )
 
-    def test_not_activate_transductor_with_no_slave_server_associated(self):
+    def test_not_activate_transductor_with_no_subordinate_server_associated(self):
         self.assertFalse(
             self.sample_energy_transductor.get_active_status()
         )
 
-    def test_should_activate_transductor_associated_with_slave_server(self):
+    def test_should_activate_transductor_associated_with_subordinate_server(self):
         self.assertIsNone(
-            self.sample_energy_transductor.slave_servers.add(
-                self.sample_slave_server
+            self.sample_energy_transductor.subordinate_servers.add(
+                self.sample_subordinate_server
             )
         )
 

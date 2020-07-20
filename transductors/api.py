@@ -1,41 +1,41 @@
 import requests
 
 
-def create_transductor(transductor, slave_server):
+def create_transductor(transductor, subordinate_server):
     protocol = "http://"
     endpoint = "/energy-transductors/"
     address = protocol\
-        + slave_server.ip_address\
+        + subordinate_server.ip_address\
         + ":"\
-        + slave_server.port\
+        + subordinate_server.port\
         + endpoint
 
     return requests.post(address, json=__get_transductor_data(transductor,
-                                                              slave_server))
+                                                              subordinate_server))
 
 
-def update_transductor(transductor, slave_server):
+def update_transductor(transductor, subordinate_server):
     protocol = "http://"
     endpoint = "/energy-transductors/"
     address = protocol\
-        + slave_server.ip_address\
+        + subordinate_server.ip_address\
         + ":"\
-        + slave_server.port\
+        + subordinate_server.port\
         + endpoint\
         + transductor.serial_number\
         + "/"
 
     return requests.put(address, json=__get_transductor_data(transductor,
-                                                             slave_server))
+                                                             subordinate_server))
 
 
-def delete_transductor(transductor, slave_server):
+def delete_transductor(transductor, subordinate_server):
     protocol = "http://"
     endpoint = "/energy-transductors/"
     address = protocol\
-        + slave_server.ip_address\
+        + subordinate_server.ip_address\
         + ":"\
-        + slave_server.port\
+        + subordinate_server.port\
         + endpoint\
         + transductor.serial_number\
         + "/"
@@ -43,7 +43,7 @@ def delete_transductor(transductor, slave_server):
     return requests.delete(address)
 
 
-def __get_transductor_data(transductor, slave_server):
+def __get_transductor_data(transductor, subordinate_server):
     latitude = (
         transductor.geolocation_latitude
         if transductor.geolocation_latitude is not None else 0.0

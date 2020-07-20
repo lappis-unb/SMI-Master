@@ -9,7 +9,7 @@ from campi.models import Campus
 
 from transductors.models import EnergyTransductor
 
-from slaves.models import Slave
+from subordinates.models import Subordinate
 
 from measurements.models import MonthlyMeasurement
 from measurements.models import MinutelyMeasurement
@@ -35,19 +35,19 @@ class EventTestCase(TestCase):
             campus=self.campus
         )
 
-        self.slave = Slave.objects.create(
+        self.subordinate = Subordinate.objects.create(
             ip_address='666.666.666.666',
             port=80,
             location='Somewhere near Wkïskh - Czech Republic',
             broken=False
         )
 
-    def test_create_failed_connection_with_slave_event(self):
-        before = len(FailedConnectionSlaveEvent.objects.all())
+    def test_create_failed_connection_with_subordinate_event(self):
+        before = len(FailedConnectionSubordinateEvent.objects.all())
 
-        self.slave.set_broken(True)
-        event = FailedConnectionSlaveEvent.objects.last()
+        self.subordinate.set_broken(True)
+        event = FailedConnectionSubordinateEvent.objects.last()
 
         self.assertEqual(
-            before + 1, len(FailedConnectionSlaveEvent.objects.all()))
-        self.assertEqual(self.slave.ip_address, event.slave.ip_address)
+            before + 1, len(FailedConnectionSubordinateEvent.objects.all()))
+        self.assertEqual(self.subordinate.ip_address, event.subordinate.ip_address)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from slaves.models import Slave
+from subordinates.models import Subordinate
 from rest_framework.exceptions import NotAcceptable
 from .models import EnergyTransductor
 
@@ -82,7 +82,7 @@ class EnergyTransductorSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AddToServerSerializer(serializers.Serializer):
-    slave_id = serializers.IntegerField()
+    subordinate_id = serializers.IntegerField()
 
 
 class EnergyTransductorListSerializer(serializers.HyperlinkedModelSerializer):
